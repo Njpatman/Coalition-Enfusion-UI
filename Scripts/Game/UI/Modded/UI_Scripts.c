@@ -2,10 +2,28 @@ class COAL_GUI_Compass: SCR_InfoDisplay
 {
 	protected TextWidget m_wBearing;
 	protected ImageWidget m_wCompass;
+	protected InputManager m_InputManager;
 	private ProgressBarWidget StamBar = null;
 	private SCR_CharacterControllerComponent m_cCharacterController = null;
 	private bool stamBarVisible = false;
+	private bool compassVisible = true;
 	
+	override void OnInit(IEntity owner)
+	{
+		m_InputManager = GetGame().GetInputManager();
+		// if(m_InputManager.ActivateContext("COA_Compass")){
+		// 	RegisterInputs();
+		// }
+		RegisterInputs();
+		
+	}
+	
+	void RegisterInputs()
+	{
+		if(!m_InputManager) return;
+		m_InputManager.AddActionListener("HintToggle",EActionTrigger.DOWN,OnToggleCompass);
+	}
+
 	override void OnStartDraw(IEntity owner)
 	{
 		IEntity player = GetGame().GetPlayerController();
@@ -113,4 +131,31 @@ class COAL_GUI_Compass: SCR_InfoDisplay
 			hideBar(StamBar);
 		}
     }
+	
+	protected void OnToggleCompass()
+	{
+		m_wBearing = TextWidget.Cast(m_wRoot.FindAnyWidget("Bearing"));
+		m_wCompass = ImageWidget.Cast(m_wRoot.FindAnyWidget("Compass"));
+		if(compassVisible)
+		{
+			hideCompass(m_wBearing,m_wCompass);
+		}
+		else
+		{
+			showCompass(m_wBearing,m_wCompass);
+		}
+		compassVisible = !compassVisible;
+		
+	}
+	
+	protected void hideCompass(TextWidget compassText, ImageWidget compassImage)
+	{
+		compassText.SetOpacity(0);
+		compassImage.SetOpacity(0);
+	}
+	protected void showCompass(TextWidget compassText, ImageWidget compassImage)
+	{
+		compassText.SetOpacity(1);
+		compassImage.SetOpacity(1);
+	}
 };
