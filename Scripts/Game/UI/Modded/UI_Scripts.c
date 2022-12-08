@@ -10,18 +10,18 @@ class COAL_GUI_Compass: SCR_InfoDisplay
 	
 	override void OnInit(IEntity owner)
 	{
+		//Get inputmanager during initalization. Register custom inputs afterwards.
 		m_InputManager = GetGame().GetInputManager();
-		// if(m_InputManager.ActivateContext("COA_Compass")){
-		// 	RegisterInputs();
-		// }
 		RegisterInputs();
 		
 	}
 	
 	void RegisterInputs()
 	{
+		//Check if inputmanager has been assigned a value
 		if(!m_InputManager) return;
-		m_InputManager.AddActionListener("HintToggle",EActionTrigger.DOWN,OnToggleCompass);
+		//Toggle compass is currently bound to numpad 5 in chimerainputcommon
+		m_InputManager.AddActionListener("ToggleCompass",EActionTrigger.DOWN,OnToggleCompass);
 	}
 
 	override void OnStartDraw(IEntity owner)
